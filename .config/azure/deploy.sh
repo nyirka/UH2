@@ -115,8 +115,6 @@ if [ -d "$LOCALAPPDATA\meteor-azure" ]; then
   rm -rf "$LOCALAPPDATA\meteor-azure"
 fi
 
-rm -r "$LOCALAPPDATA\.meteor"
-
 # Install Meteor
 if [ ! -e "$LOCALAPPDATA\.meteor\meteor.bat" ]; then
   echo meteor-azure: Installing Meteor
