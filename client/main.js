@@ -9,7 +9,13 @@ Meteor.subscribe('marked');
 
 function markText(keyCode) {
     //add selection:
-    var sStr = window.getSelection().toString();
+    var sStr = "";
+    if (window.getSelection) {
+        sStr = window.getSelection().toString();
+    }
+    else if (document.selection && document.selection.type != "Control") {
+        sStr = document.selection.createRange().text;
+    }
     sStr = sStr.replace(/(\r\n|\n|\r)/gm,"");
     var allText = document.getElementById("allText").innerHTML;
     allText = allText.replace(/(\r\n|\n|\r|\s{2,})/gm,"");
@@ -30,7 +36,16 @@ function markText(keyCode) {
                 var pPos = posStr + sStr.length - lenText;
                 endPos = pPos;
                 sStr = "";
-                document.getSelection().removeAllRanges();
+                //document.getSelection().removeAllRanges();
+                if (window.getSelection) {
+                    if (window.getSelection().empty) {  // Chrome
+                        window.getSelection().empty();
+                    } else if (window.getSelection().removeAllRanges) {  // Firefox
+                        window.getSelection().removeAllRanges();
+                    }
+                } else if (document.selection) {  // IE?
+                    document.selection.empty();
+                }
             }
             if ((lenText < posStr) && (lenText + plen > posStr)) {
                 var pPos = posStr - lenText;
